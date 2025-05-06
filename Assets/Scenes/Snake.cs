@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using static UnityEngine.Rendering.HableCurve;
 
 public class Snake : MonoBehaviour
@@ -11,12 +12,16 @@ public class Snake : MonoBehaviour
     public Transform segmentPrefab;
     public int initialSize = 5;
 
+    public int puntaje = 0;
+    public Text puntacionText;
+
 
     private void Start()
     {
         segments = new List<Transform>();
         segments.Add(this.transform);
 
+        resetearPuntaje();
 
         // Generar el tamaño inicial de la serpiente
         for (int i = 1; i < initialSize; i++)
@@ -76,6 +81,9 @@ public class Snake : MonoBehaviour
         Transform segment = Instantiate(this.segmentPrefab);
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
+
+        puntaje+=1;
+        puntacionText.text = puntaje.ToString();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -93,7 +101,9 @@ public class Snake : MonoBehaviour
     }
 
     private void ResetState()
+
     {
+        resetearPuntaje();
         // Reiniciar el estado de la serpiente
         for (int i = 1; i < segments.Count; i++)
         {
@@ -111,6 +121,13 @@ public class Snake : MonoBehaviour
         {
             Grow();
         }
+    }
+
+    public void resetearPuntaje()
+    {
+        puntaje = 0;
+        puntacionText.text = puntaje.ToString();
+
     }
 
 
