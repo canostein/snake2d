@@ -8,9 +8,10 @@ public class Snake : MonoBehaviour
 {
 
     public Vector2 direction = Vector2.right;
+    public Vector2 lastDirection = Vector2.right;
     public List<Transform> segments; // Lista de segmentos 
     public Transform segmentPrefab;
-    public int initialSize = 5;
+    public int initialSize = 6;
 
     public int puntaje = 0;
     public Text puntacionText;
@@ -21,7 +22,6 @@ public class Snake : MonoBehaviour
         segments = new List<Transform>();
         segments.Add(this.transform);
 
-        resetearPuntaje();
 
         // Generar el tamaño inicial de la serpiente
         for (int i = 1; i < initialSize; i++)
@@ -36,19 +36,19 @@ public class Snake : MonoBehaviour
     {
         var keyboard = Keyboard.current; // Accede al teclado con el nuevo sistema
 
-        if (keyboard.upArrowKey.wasPressedThisFrame)
+        if (keyboard.upArrowKey.wasPressedThisFrame && lastDirection != Vector2.down)
         {
             direction = Vector2.up;
         }
-        else if (keyboard.downArrowKey.wasPressedThisFrame)
+        else if (keyboard.downArrowKey.wasPressedThisFrame && lastDirection != Vector2.up)
         {
             direction = Vector2.down;
         }
-        else if (keyboard.leftArrowKey.wasPressedThisFrame)
+        else if (keyboard.leftArrowKey.wasPressedThisFrame && lastDirection != Vector2.right)
         {
             direction = Vector2.left;
         }
-        else if (keyboard.rightArrowKey.wasPressedThisFrame)
+        else if (keyboard.rightArrowKey.wasPressedThisFrame && lastDirection != Vector2.left)
         {
             direction = Vector2.right;
         }
@@ -59,8 +59,9 @@ public class Snake : MonoBehaviour
     private void FixedUpdate()
     {
 
-            // Mover los segmentos del cuerpo
-            for (int i = segments.Count - 1; i > 0; i--)
+        lastDirection = direction;
+        // Mover los segmentos del cuerpo
+        for (int i = segments.Count - 1; i > 0; i--)
             {
                 segments[i].position = segments[i - 1].position;
             }
@@ -82,8 +83,7 @@ public class Snake : MonoBehaviour
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
 
-        puntaje+=1;
-        puntacionText.text = puntaje.ToString();
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -92,6 +92,8 @@ public class Snake : MonoBehaviour
         if (other.CompareTag("Food"))
         {
             Grow();
+            puntaje += 1;
+            puntacionText.text = "Score:"+ puntaje.ToString();
         }
 
         else if (other.CompareTag("Obstacle"))
@@ -115,6 +117,7 @@ public class Snake : MonoBehaviour
 
         transform.position = Vector3.zero;
         direction = Vector2.right;
+        lastDirection = Vector2.right;
 
         // Regenerar el tamaño inicial
         for (int i = 1; i < initialSize; i++)
@@ -125,8 +128,8 @@ public class Snake : MonoBehaviour
 
     public void resetearPuntaje()
     {
-        puntaje = 0;
-        puntacionText.text = puntaje.ToString();
+        this.puntaje = 0;
+        this.puntacionText.text = puntaje.ToString();
 
     }
 
