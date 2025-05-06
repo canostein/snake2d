@@ -1,0 +1,15 @@
+.vs/
+*.user
+*.suo
+*.tmp
+*.log
+
+Temp/
+Library/
+Logs/
+Obj/
+Build/
+*.csproj
+*.sln
+*.user
+*.unityproj
