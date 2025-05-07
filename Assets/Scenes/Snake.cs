@@ -16,18 +16,20 @@ public class Snake : MonoBehaviour
     public int puntaje = 0;
     public Text puntacionText;
 
+    private bool juegoPausado = false;
 
     private void Start()
     {
         segments = new List<Transform>();
         segments.Add(this.transform);
 
-
         // Generar el tamaño inicial de la serpiente
         for (int i = 1; i < initialSize; i++)
         {
             Grow();
         }
+
+      
 
 
     }
@@ -51,6 +53,18 @@ public class Snake : MonoBehaviour
         else if (keyboard.rightArrowKey.wasPressedThisFrame && lastDirection != Vector2.left)
         {
             direction = Vector2.right;
+        }else if (keyboard.escapeKey.wasPressedThisFrame)
+        {
+            if (juegoPausado)
+            {
+                Time.timeScale = 1;
+                juegoPausado = false;
+            }
+            else
+            {
+                Time.timeScale = 0;
+                juegoPausado = true;
+            }
         }
 
 
@@ -98,6 +112,7 @@ public class Snake : MonoBehaviour
 
         else if (other.CompareTag("Obstacle"))
         {
+           
             ResetState();
         }
     }
@@ -105,7 +120,7 @@ public class Snake : MonoBehaviour
     private void ResetState()
 
     {
-        resetearPuntaje();
+        ResetearPuntaje();
         // Reiniciar el estado de la serpiente
         for (int i = 1; i < segments.Count; i++)
         {
@@ -126,7 +141,7 @@ public class Snake : MonoBehaviour
         }
     }
 
-    public void resetearPuntaje()
+    public void ResetearPuntaje()
     {
         this.puntaje = 0;
         this.puntacionText.text = puntaje.ToString();

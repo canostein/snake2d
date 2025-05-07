@@ -3,10 +3,12 @@ using UnityEngine;
 public class Food : MonoBehaviour
 {
     public BoxCollider2D gridArea;
+    private AudioSource audioSource;
 
     private void Start()
     {
         RandomizePosition();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -15,7 +17,8 @@ public class Food : MonoBehaviour
        // if (other.CompareTag("Player"))
         //{
             RandomizePosition();
-       // }
+            audioSource.Play();
+        // }
     }
 
 
