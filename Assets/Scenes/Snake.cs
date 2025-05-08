@@ -18,6 +18,8 @@ public class Snake : MonoBehaviour
 
     private bool juegoPausado = false;
 
+    public float moveSpeed = 0.2f;
+    private float moveTimer; 
 
     private void Start()
     {
@@ -30,7 +32,7 @@ public class Snake : MonoBehaviour
             Grow();
         }
 
-      
+        moveTimer = moveSpeed;
 
 
     }
@@ -86,6 +88,8 @@ public class Snake : MonoBehaviour
     {
 
 
+
+
             lastDirection = direction;
             // Mover los segmentos del cuerpo
             for (int i = segments.Count - 1; i > 0; i--)
@@ -99,6 +103,9 @@ public class Snake : MonoBehaviour
                 Mathf.Round(this.transform.position.y + direction.y),
                 0.0f
             );
+
+
+
 
 
     }
