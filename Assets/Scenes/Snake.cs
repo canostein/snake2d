@@ -18,6 +18,7 @@ public class Snake : MonoBehaviour
 
     private bool juegoPausado = false;
 
+
     private void Start()
     {
         segments = new List<Transform>();
@@ -36,24 +37,35 @@ public class Snake : MonoBehaviour
 
     private void Update()
     {
-        var keyboard = Keyboard.current; // Accede al teclado con el nuevo sistema
+        var keyboard = Keyboard.current;
 
-        if (keyboard.upArrowKey.wasPressedThisFrame && lastDirection != Vector2.down)
+        if (!juegoPausado)
         {
-            direction = Vector2.up;
+
+            if (keyboard.upArrowKey.wasPressedThisFrame && lastDirection != Vector2.down)
+            {
+                direction = Vector2.up;
+                transform.eulerAngles = new Vector3(0, 0, 180);
+            }
+            else if (keyboard.downArrowKey.wasPressedThisFrame && lastDirection != Vector2.up)
+            {
+                direction = Vector2.down;
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else if (keyboard.leftArrowKey.wasPressedThisFrame && lastDirection != Vector2.right)
+            {
+                direction = Vector2.left;
+                transform.eulerAngles = new Vector3(0, 0, -90);
+            }
+            else if (keyboard.rightArrowKey.wasPressedThisFrame && lastDirection != Vector2.left)
+            {
+                direction = Vector2.right;
+                transform.eulerAngles = new Vector3(0, 0, 90);
+            }
+
         }
-        else if (keyboard.downArrowKey.wasPressedThisFrame && lastDirection != Vector2.up)
-        {
-            direction = Vector2.down;
-        }
-        else if (keyboard.leftArrowKey.wasPressedThisFrame && lastDirection != Vector2.right)
-        {
-            direction = Vector2.left;
-        }
-        else if (keyboard.rightArrowKey.wasPressedThisFrame && lastDirection != Vector2.left)
-        {
-            direction = Vector2.right;
-        }else if (keyboard.escapeKey.wasPressedThisFrame)
+        
+        if (keyboard.escapeKey.wasPressedThisFrame)
         {
             if (juegoPausado)
             {
@@ -73,9 +85,10 @@ public class Snake : MonoBehaviour
     private void FixedUpdate()
     {
 
-        lastDirection = direction;
-        // Mover los segmentos del cuerpo
-        for (int i = segments.Count - 1; i > 0; i--)
+
+            lastDirection = direction;
+            // Mover los segmentos del cuerpo
+            for (int i = segments.Count - 1; i > 0; i--)
             {
                 segments[i].position = segments[i - 1].position;
             }
@@ -133,7 +146,7 @@ public class Snake : MonoBehaviour
         transform.position = Vector3.zero;
         direction = Vector2.right;
         lastDirection = Vector2.right;
-
+        transform.eulerAngles = new Vector3(0, 0, 90);
         // Regenerar el tamaño inicial
         for (int i = 1; i < initialSize; i++)
         {
